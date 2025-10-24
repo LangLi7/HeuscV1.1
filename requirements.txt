@@ -1,0 +1,12 @@
+tensorflow
+keras
+pandas
+numpy
+scikit-learn
+yfinance
+python-binance
+flask
+freecurrencyapi
+python-dotenv
+requests
+colorama

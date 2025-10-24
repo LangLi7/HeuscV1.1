@@ -1,0 +1,77 @@
+DayTradeHeusc/
+├── configs/                    # JSON Konfigurationsdateien
+│   ├── crypto_btc_config.json
+│   ├── crypto_eth_config.json  
+│   ├── stock_aapl_config.json
+│   └── stock_tsla_config.json
+├── data/                       # Datenordner
+│   ├── csv/
+│   │   ├── binance/           # Binance CSV Dateien
+│   │   └── yahoo/             # Yahoo Finance CSV Dateien
+│   └── processed/             # Vorverarbeitete Daten
+├── models/                     # Gespeicherte Keras Models
+│   ├── Heusc_BTC_v0.01_20251017_120000.keras
+│   ├── Heusc_BTC_v0.01_20251017_120000_config.json
+│   └── ...
+├── src/                        # Source Code
+│   ├── __init__.py
+│   ├── model_builder.py        # LSTM-CNN Model Builder
+│   ├── data_fetchers.py        # Binance & Yahoo API Clients
+│   ├── predictor.py           # Model Prediction Class
+│   └── utils.py               # Hilfsfunktionen
+├── api/                        # Flask API
+│   ├── flask_api.py           # Hauptapi
+│   └── routes/                # API Routen
+├── logs/                       # Logs und Vorhersagen
+│   ├── training_logs/
+│   ├── prediction_logs/
+│   └── live_predictions.json
+├── tests/                      # Unit Tests
+├── scripts/                    # Ausführbare Skripte
+│   ├── train_model.py         # Training Skript
+│   ├── live_predict.py        # Live Vorhersage Skript
+│   └── data_collector.py      # Datensammlung Skript
+├── requirements.txt            # Python Dependencies
+├── .env.example               # Environment Variables Template
+├── .gitignore                 # Git Ignore File
+└── README.md                  # Projektdokumentation
+
+andere variante:
+project_root/
+│
+├── .env                              # API Keys & Secrets
+├── requirements.txt                  # Python dependencies
+├── README.md                         # Erklärungen zu Parametern, Setup usw.
+│
+├── data/                             # <— Alle Rohdaten & CSV-Dateien
+│   ├── binance/
+│   └── yahoo/
+│
+├── models/                           # <— Gespeicherte Keras-Modelle
+│   ├── cnn_lstm_hybrid.keras
+│   ├── training_logs/
+│   └── checkpoints/
+│
+├── logs/                             # <— Trading- und Lernlogs
+│   ├── trade_log.json
+│   ├── model_eval.json
+│   └── live_predictions.log
+│
+├── config/
+│   ├── settings.json                 # Konfiguration (Model, API, Training etc.)
+│   └── training_config.json
+│
+├── api/
+│   └── flask_api.py                  # Dein oben gezeigter Code
+│
+├── src/
+│   ├── __init__.py
+│   ├── data_loader.py                # Laden, Chunking, Feature-Prep
+│   ├── preprocess.py                 # Feature Scaling, Candle-Blöcke
+│   ├── model_cnn_lstm.py             # CNN+LSTM Architektur + Training
+│   ├── trainer.py                    # Training + Validation Pipeline
+│   ├── simulator.py                  # Simulierte Trades / Feedback
+│   ├── live_predictor.py             # Live-Loop / Echtzeitvorhersage
+│   └── utils.py                      # Logging, Timer, Helper-Funktionen
+│
+└── main.py                           # Einstiegspunkt, orchestriert alles

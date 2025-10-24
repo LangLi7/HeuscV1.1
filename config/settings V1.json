@@ -1,0 +1,93 @@
+{
+  "data": {
+    "sources": ["binance", "yahoo"],
+    "symbols": ["BTCUSDT", "NVDA"],
+    "interval": "1m",
+    "period": "1y",
+    "chunk_days": 7,
+    "features": ["open", "high", "low", "close", "volume"],
+    "candle_block_size": 20,
+    "target": {
+      "type": "direction",
+      "method": "binary",  // oder "multi_class", "regression"
+      "threshold": 0.0001,  // Minimale Preisänderung für Richtung
+      "future_steps": 1     // Vorhersage für nächste N Kerzen
+    },
+    "split": {
+      "train": 0.8,
+      "validation": 0.1,
+      "test": 0.1
+    },
+    "paths": {
+      "csv": "data/",
+      "models": "models/",
+      "logs": "logs/",
+      "settings": "config/"
+    }
+  },
+
+  "model": {
+    "type": "hybrid_cnn_lstm",
+    "cnn": {
+      "layers": 2,
+      "filters": [64, 128],
+      "kernel_sizes": [3, 3],  // Bei größerem candle_block_size OK
+      "activations": ["relu", "relu"],
+      "pooling": "max",
+      "pool_size": 2,  // <-- Explizit definieren
+      "dropout": 0.25
+    },
+    "lstm": {
+      "layers": 3,
+      "units": [128, 64, 32],
+      "dropout": [0.3, 0.2, 0.2],
+      "recurrent_dropout": 0.1,
+      "bidirectional": false
+    },
+    "dense": {
+      "layers": 2,
+      "units": [64, 1],
+      "activations": ["relu", "sigmoid"]
+    },
+    "optimizer": {
+      "type": "adam",
+      "learning_rate": 0.001,
+      "decay": 1e-6
+    },
+    "loss": "binary_crossentropy",
+    "metrics": ["accuracy", "precision", "recall"]
+  },
+
+  "training": {
+    "epochs": 50,
+    "batch_size": 128,
+    "validation_split": 0.1,
+    "shuffle": true,
+    "early_stopping": {
+      "enabled": true,
+      "patience": 5,
+      "monitor": "val_loss"
+    },
+    "save_best_only": true,
+    "tensorboard": true,
+    "use_gpu": true
+  },
+
+  "simulation": {
+    "enabled": false,
+    "mode": "paper", 
+    "initial_balance": 1000,
+    "trade_fee": 0.001,
+    "reward_multiplier": 1.5,
+    "log_trades": true,
+    "path": "simulation/logs/"
+  },
+
+  "live_prediction": {
+    "enabled": true,
+    "wait_for_candles": 3,
+    "predict_next": 10,
+    "update_interval_sec": 1,
+    "data_block": true
+  }
+}

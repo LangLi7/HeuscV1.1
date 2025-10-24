@@ -1,0 +1,79 @@
+{
+  "model_info": {
+    "model_name": "Heusc_Stock",
+    "version": 0.01,
+    "created_date": "20251017_143400",
+    "description": "LSTM-CNN f\u00fcr Aktien 1min Candlestick Vorhersage"
+  },
+  "data_source": {
+    "type": "yahoo",
+    "symbol": "AAPL",
+    "interval": "1m",
+    "features": [
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume"
+    ]
+  },
+  "model_architecture": {
+    "cnn_layers": [
+      {
+        "type": "Conv1D",
+        "filters": 128,
+        "kernel_size": 5,
+        "activation": "relu"
+      },
+      {
+        "type": "Conv1D",
+        "filters": 64,
+        "kernel_size": 3,
+        "activation": "relu"
+      }
+    ],
+    "lstm_layers": [
+      {
+        "type": "LSTM",
+        "units": 128,
+        "return_sequences": true
+      },
+      {
+        "type": "LSTM",
+        "units": 64,
+        "return_sequences": true
+      },
+      {
+        "type": "LSTM",
+        "units": 32,
+        "return_sequences": false
+      }
+    ],
+    "dense_layers": [
+      {
+        "type": "Dense",
+        "units": 1,
+        "activation": "sigmoid"
+      }
+    ]
+  },
+  "training_settings": {
+    "optimizer": "adam",
+    "loss": "binary_crossentropy",
+    "metrics": [
+      "accuracy"
+    ],
+    "epochs": 150,
+    "batch_size": 64,
+    "validation_split": 0.2,
+    "early_stopping": true,
+    "patience": 15
+  },
+  "sequence_length": 5,
+  "prediction_steps": 3,
+  "retraining_settings": {
+    "retrain_with_predictions": true,
+    "prediction_threshold": 0.5,
+    "max_wrong_predictions": 500
+  }
+}

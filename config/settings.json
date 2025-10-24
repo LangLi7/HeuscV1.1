@@ -1,0 +1,114 @@
+{
+  "data": {
+    "sources": ["binance", "yahoo"],
+    "symbols": ["BTCUSDT", "NVDA"],
+    "interval": "5m",
+    "period": "6mo",
+    "chunk_days": 7,
+    "features": ["open", "high", "low", "close", "volume"],
+
+    "preprocessing": {
+      "scaler": "minmax",
+      "scale_per_symbol": true,
+      "fill_missing": "ffill"
+    },
+
+    "candle_block_size": 60,
+
+    "target": {
+      "type": "direction",
+      "method": "binary",
+      "threshold": 0.0001,
+      "future_steps": 1
+    },
+
+    "split": {
+      "train": 0.8,
+      "validation": 0.1,
+      "test": 0.1
+    },
+
+    "paths": {
+      "csv": "data/",
+      "models": "models/",
+      "logs": "logs/",
+      "settings": "config/"
+    }
+  },
+
+  "model": {
+    "type": "hybrid_cnn_lstm",
+
+    "cnn": {
+      "layers": 2,
+      "filters": [64, 128],
+      "kernel_sizes": [3, 3],
+      "activations": ["relu", "relu"],
+      "pooling": "max",
+      "pool_size": 2,
+      "dropout": 0.4
+    },
+
+    "lstm": {
+      "layers": 3,
+      "units": [128, 64, 32],
+      "return_sequences": [true, true, false],
+      "dropout": [0.4, 0.3, 0.2],
+      "recurrent_dropout": 0.2,
+      "bidirectional": false
+    },
+
+    "dense": {
+      "layers": 2,
+      "units": [64, 1],
+      "activations": ["relu", "sigmoid"]
+    },
+
+    "optimizer": {
+      "type": "adam",
+      "learning_rate": 0.001,
+      "decay": 1e-6
+    },
+
+    "loss": "binary_crossentropy",
+    "metrics": ["accuracy", "precision", "recall"]
+  },
+
+  "training": {
+    "epochs": 100,
+    "batch_size": 64,
+    "shuffle": false,
+    "class_weight": "balanced",
+
+    "early_stopping": {
+      "enabled": true,
+      "patience": 10,
+      "monitor": "val_loss"
+    },
+
+    "save_best_only": true,
+    "tensorboard": true,
+    "use_gpu": true
+  },
+
+  "simulation": {
+    "enabled": true,
+    "mode": "paper",
+    "initial_balance": 1000,
+    "trade_fee": 0.001,
+    "reward_multiplier": 1.5,
+    "confidence_threshold": 0.7,
+    "min_price_movement": 0.0005,
+    "log_trades": true,
+    "path": "simulation/logs/"
+  },
+
+  "live_prediction": {
+    "enabled": true,
+    "wait_for_candles": 3,
+    "predict_next": 10,
+    "update_interval_sec": 1,
+    "data_block": true,
+    "confidence_threshold": 0.7
+  }
+}
