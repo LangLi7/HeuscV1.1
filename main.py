@@ -7,6 +7,7 @@ from pathlib import Path
 
 from src.trainer import MarketSimulationTrainer
 from src.gpu_check import gpu_info
+from src.loader import SystemLoader
 
 
 def main(settings_path: str = "config/settings.json") -> None:
@@ -14,7 +15,10 @@ def main(settings_path: str = "config/settings.json") -> None:
     results = trainer.run()
     print(json.dumps(results, indent=2, ensure_ascii=False))
 
-
 if __name__ == "__main__":
+    app_loader = SystemLoader("HEUSC Engine Initialisierung", total_steps=2)
+    app_loader.update(info="Prüfe GPU und Umgebung...")
     gpu_info()
+    app_loader.update(info="Starte Training...")
     main()
+    app_loader.done("HEUSC Engine bereit.")

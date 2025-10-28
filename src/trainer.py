@@ -26,6 +26,7 @@ from sklearn.utils.class_weight import compute_class_weight
 from tensorflow.keras import Model
 
 from .log import log_error_once, log_info, log_exception
+from .loader import SystemLoader, TFTrainingLoader
 from .indicator_calculator import TechnicalIndicatorCalculator
 from .invest_profit_calculator import Investment
 from .model_cnn_lstm import build_callbacks, build_hybrid_cnn_lstm, load_settings
@@ -323,6 +324,10 @@ class MarketSimulationTrainer:
         logs_root.mkdir(parents=True, exist_ok=True)
         callbacks_list = build_callbacks(self.training_config, logs_root)
 
+        # 🔹 TensorFlow Loader Callback einfügen
+        tf_loader = TFTrainingLoader(total_epochs=int(self.training_config.get("epochs", 50)))
+        callbacks_list.append(tf_loader)
+
         class_weight = self._determine_class_weights(dataset.y_train)
 
         self.history = self.model.fit(
@@ -334,7 +339,7 @@ class MarketSimulationTrainer:
             shuffle=bool(self.training_config.get("shuffle", False)),
             callbacks=callbacks_list,
             class_weight=class_weight,
-            verbose=2,
+            verbose=0,  # ⬅️ wichtig: unterdrückt Keras-eigene Logs
         )
 
         if self.training_config.get("save_best_only", False):
@@ -344,6 +349,31 @@ class MarketSimulationTrainer:
             self.model.save(model_path)
 
         return self.model
+    
+    # ------------------------------------------------------------------
+    # Convenience entry point
+    # ------------------------------------------------------------------
+    def run(self) -> Dict[str, float]:
+        # === System Loader für gesamte Pipeline ===
+        loader = SystemLoader("HEUSC – Training Pipeline", total_steps=4)
+
+        # === Schritt 1: Dataset vorbereiten ===
+        loader.update(info="Lade und verarbeite Datensätze...")
+        dataset = self.prepare_dataset()
+
+        # === Schritt 2: Modell-Training ===
+        loader.update(info="Trainiere Modell...")
+        self.train(dataset)
+
+        # === Schritt 3: Simulation ===
+        loader.update(info="Starte Simulation...")
+        results = self.simulate(dataset)
+
+        # === Schritt 4: Abschluss ===
+        loader.update(info="Speichere Ergebnisse...")
+        loader.done("Pipeline abgeschlossen")
+
+        return results
 
     # ------------------------------------------------------------------
     # Simulation / Paper trading

@@ -1,4 +1,26 @@
+# --- Python Caches ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Virtual Environments ---
 /.env
 /.venv
 venv/
 env/
+
+# --- Build/Packaging ---
+build/
+dist/
+*.egg-info/
+
+# --- Jupyter / Notebooks ---
+.ipynb_checkpoints/
+
+# --- System Files ---
+.DS_Store
+Thumbs.db
+
+# --- IDE / Editor ---
+.vscode/
+.idea/
