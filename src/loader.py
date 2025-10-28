@@ -178,7 +178,13 @@ class TFTrainingLoader(Callback):
         bar = f"{COLOR_GREEN}{'━'*filled}{COLOR_GRAY}{'░'*(self.bar_length-filled)}{COLOR_RESET}"
 
         gpu_info = self._gpu_status()
-
+        
+        # === Dynamische Farbwahl basierend auf Leistung ===
+        acc_c  = COLOR_RED if acc < 0.4 else COLOR_YELLOW if acc < 0.6 else COLOR_GREEN
+        loss_c = COLOR_GREEN if loss < 0.4 else COLOR_YELLOW if loss < 0.7 else COLOR_RED
+        prec_c = COLOR_RED if prec < 0.4 else COLOR_YELLOW if prec < 0.6 else COLOR_CYAN
+        rec_c  = COLOR_RED if rec < 0.5 else COLOR_YELLOW if rec < 0.8 else COLOR_MAGENTA
+        
         sys.stdout.write(
             f"\r\033[3A\033[2K"
             f"🧩 Epoch {self.current_epoch:02d}/{self.total_epochs} | "
