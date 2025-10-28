@@ -1,4 +1,5 @@
 import sys
+import os
 import time
 import subprocess
 from datetime import datetime
@@ -7,14 +8,16 @@ from ipywidgets import IntProgress, Label, HBox, VBox
 from IPython.display import display, clear_output
 from tensorflow.keras.callbacks import Callback
 
-# ANSI-Farbcodes für Terminalfarben
-COLOR_RESET = "\033[0m"
-COLOR_GREEN = "\033[92m"
+# === Farben (ANSI) ===
+COLOR_RESET  = "\033[0m"
+COLOR_GREEN  = "\033[92m"
 COLOR_YELLOW = "\033[93m"
-COLOR_RED = "\033[91m"
-COLOR_BLUE = "\033[94m"
-COLOR_WHITE = "\033[97m"
-COLOR_GRAY = "\033[90m"
+COLOR_RED    = "\033[91m"
+COLOR_BLUE   = "\033[94m"
+COLOR_WHITE  = "\033[97m"
+COLOR_GRAY   = "\033[90m"
+COLOR_CYAN   = "\033[96m"
+COLOR_MAGENTA = "\033[95m"
 
 class SystemLoader:
     def __init__(self, task_name: str, total_steps: int = 100, bar_length: int = 30):
@@ -97,90 +100,112 @@ class JupyterLoader:
 
 class TFTrainingLoader(Callback):
     """
-    Farbige Live-Trainingsanzeige mit GPU-Status bei jeder Batch-Aktualisierung.
-    Kompatibel mit der grünen Keras-Fortschrittsleiste.
+    HEUSC Live-Loader:
+    Kombinierte Anzeige von Epoch + Batch mit Live-GPU-Monitoring.
+    Beispiel:
+    🧩 Epoch 02 | Batch 220/3280 |━━━░░░░░░░░░░░░░░░|  6.7%  213ms/step
+       acc=0.4912 loss=0.6987 prec=0.4803 rec=0.8809
+       GPU0 RTX3060: 38% | 46°C | 32W | 6123/12288MiB
     """
-    def __init__(self, total_epochs, update_interval_batches=1):
+
+    def __init__(self, total_epochs, total_batches=None, update_interval=0.25, bar_length=26):
         super().__init__()
         self.total_epochs = total_epochs
-        self.update_interval_batches = update_interval_batches
-        self.start = None
+        self.total_batches = total_batches
+        self.update_interval = update_interval
+        self.bar_length = bar_length
+        self.start_time = None
+        self.last_update = 0
+        self.current_epoch = 1
 
+    # ---------- GPU STATUS ----------
     def _gpu_status(self):
-        """Fragt nvidia-smi live ab (Name, Auslastung, Temperatur, Leistung, Speicher) und färbt Werte."""
         try:
-            result = subprocess.check_output([
+            out = subprocess.check_output([
                 "nvidia-smi",
                 "--query-gpu=name,utilization.gpu,temperature.gpu,power.draw,memory.used,memory.total",
                 "--format=csv,noheader,nounits"
             ]).decode().strip().split("\n")
 
             infos = []
-            for i, line in enumerate(result):
-                name, util, temp, power, mem_used, mem_total = [x.strip() for x in line.split(",")]
-                util = int(util)
-                temp = int(temp)
-                power = float(power)
-
-                # Farben dynamisch bestimmen
-                if util < 40:
-                    util_color = COLOR_GREEN
-                elif util < 75:
-                    util_color = COLOR_YELLOW
-                else:
-                    util_color = COLOR_RED
-
-                if temp < 60:
-                    temp_color = COLOR_GREEN
-                elif temp < 75:
-                    temp_color = COLOR_YELLOW
-                else:
-                    temp_color = COLOR_RED
-
+            for i, line in enumerate(out):
+                name, util, temp, power, mu, mt = [x.strip() for x in line.split(",")]
+                util, temp, power = int(util), int(temp), float(power)
+                util_c = COLOR_GREEN if util < 40 else COLOR_YELLOW if util < 75 else COLOR_RED
+                temp_c = COLOR_GREEN if temp < 60 else COLOR_YELLOW if temp < 75 else COLOR_RED
                 infos.append(
                     f"{COLOR_BLUE}GPU{i}{COLOR_WHITE} {name}: "
-                    f"{util_color}{util}%{COLOR_WHITE} | "
-                    f"{temp_color}{temp}°C{COLOR_WHITE} | "
+                    f"{util_c}{util}%{COLOR_WHITE} | "
+                    f"{temp_c}{temp}°C{COLOR_WHITE} | "
                     f"{COLOR_GRAY}{power:.0f}W{COLOR_WHITE} | "
-                    f"{COLOR_GREEN}{mem_used}/{mem_total} MiB{COLOR_WHITE}"
+                    f"{COLOR_CYAN}{mu}/{mt} MiB{COLOR_WHITE}"
                 )
             return " | ".join(infos)
         except Exception:
             return f"{COLOR_RED}GPU Info unavailable{COLOR_RESET}"
 
+    # ---------- TRAINING BEGIN ----------
     def on_train_begin(self, logs=None):
-        self.start = time.time()
-        print(f"\n{COLOR_BLUE}🚀 Training gestartet...{COLOR_RESET}\n")
+        self.start_time = time.time()
+        print(f"\n{COLOR_BLUE}🚀 Training gestartet (HEUSC Live-Loader aktiviert){COLOR_RESET}\n")
 
+    # ---------- EPOCH BEGIN ----------
+    def on_epoch_begin(self, epoch, logs=None):
+        self.current_epoch = epoch + 1
+        print(f"\n🧩 Epoch {self.current_epoch:03d}/{self.total_epochs} gestartet...")
+
+    # ---------- BATCH END ----------
     def on_train_batch_end(self, batch, logs=None):
-        """Wird nach jedem Batch aufgerufen – zeigt GPU live."""
-        if batch % self.update_interval_batches == 0:
-            acc = logs.get("accuracy", 0.0)
-            loss = logs.get("loss", 0.0)
-            elapsed = time.time() - self.start
-            gpu_info = self._gpu_status()
+        now = time.time()
+        if now - self.last_update < self.update_interval:
+            return
+        self.last_update = now
 
-            sys.stdout.write(
-                f"\r{gpu_info} | "
-                f"{COLOR_GREEN}acc={acc:.4f}{COLOR_WHITE} | "
-                f"{COLOR_YELLOW}loss={loss:.4f}{COLOR_WHITE} | "
-                f"⏱ {COLOR_GRAY}{elapsed:6.1f}s{COLOR_RESET}     "
-            )
-            sys.stdout.flush()
-
-    def on_epoch_end(self, epoch, logs=None):
-        acc = logs.get("accuracy", 0.0)
-        val_acc = logs.get("val_accuracy", 0.0)
+        acc  = logs.get("accuracy", 0.0)
         loss = logs.get("loss", 0.0)
+        prec = logs.get("precision", 0.0)
+        rec  = logs.get("recall", 0.0)
+
+        elapsed = now - self.start_time
+        elapsed_min, elapsed_sec = divmod(int(elapsed), 60)
+        step_ms = int((elapsed / (batch + 1)) * 1000) if batch > 0 else 0
+        # Formatierte Gesamtzeit
+        elapsed_fmt = f"{elapsed_min:02d}:{elapsed_sec:02d}"
+
+        # Fortschrittsbalken
+        progress = (batch + 1) / self.total_batches if self.total_batches else 0
+        filled = int(self.bar_length * progress)
+        bar = f"{COLOR_GREEN}{'━'*filled}{COLOR_GRAY}{'░'*(self.bar_length-filled)}{COLOR_RESET}"
+
+        gpu_info = self._gpu_status()
+
+        sys.stdout.write(
+            f"\r\033[3A\033[2K"
+            f"🧩 Epoch {self.current_epoch:02d}/{self.total_epochs} | "
+            f"Batch {batch+1:04d}/{self.total_batches or 0:04d} |{bar}| "
+            f"{progress*100:5.1f}%  {step_ms:3d}ms/step  ⏱ {COLOR_GRAY}{elapsed_fmt}{COLOR_RESET}\n"
+            f"\033[2K   acc={acc_c}{acc:.4f}{COLOR_WHITE} "
+            f"loss={loss_c}{loss:.4f}{COLOR_WHITE} "
+            f"prec={prec_c}{prec:.4f}{COLOR_WHITE} "
+            f"rec={rec_c}{rec:.4f}{COLOR_RESET}\n"
+            f"\033[2K{gpu_info}\n"
+        )
+        sys.stdout.flush()
+
+    # ---------- EPOCH END ----------
+    def on_epoch_end(self, epoch, logs=None):
+        self.current_epoch = epoch + 1  # <── aktuelle Epoche setzen (nicht vorher!)
+        val_acc = logs.get("val_accuracy", 0.0)
         val_loss = logs.get("val_loss", 0.0)
-        elapsed = time.time() - self.start
+        elapsed = time.time() - self.start_time
+        elapsed_min, elapsed_sec = divmod(int(elapsed), 60)
 
         print(
-            f"\n🧠 {COLOR_BLUE}Epoch {epoch+1}/{self.total_epochs}{COLOR_RESET} | "
-            f"{COLOR_GREEN}acc={acc:.4f}{COLOR_WHITE} val_acc={COLOR_GREEN}{val_acc:.4f}{COLOR_WHITE} | "
-            f"{COLOR_YELLOW}loss={loss:.4f}{COLOR_WHITE} val_loss={COLOR_YELLOW}{val_loss:.4f}{COLOR_WHITE} "
-            f"| ⏱ {COLOR_GRAY}{elapsed:6.1f}s{COLOR_RESET}"
+            f"\n✅ {COLOR_BLUE}Epoch {self.current_epoch:02d}/{self.total_epochs}{COLOR_RESET} abgeschlossen "
+            f"| {COLOR_GREEN}val_acc={val_acc:.4f}{COLOR_WHITE} "
+            f"| {COLOR_YELLOW}val_loss={val_loss:.4f}{COLOR_RESET} "
+            f"| ⏱ {COLOR_GRAY}{elapsed_min:02d}:{elapsed_sec:02d}{COLOR_RESET}\n"
         )
 
     def on_train_end(self, logs=None):
-        print(f"\n{COLOR_GREEN}✅ Training abgeschlossen!{COLOR_RESET}\n")
+        print(f"\n{COLOR_GREEN}🎯 Training abgeschlossen!{COLOR_RESET}\n")

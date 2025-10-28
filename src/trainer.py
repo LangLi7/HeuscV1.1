@@ -335,7 +335,7 @@ class MarketSimulationTrainer:
         print(f"Batch Size: {batch_size} | Prefetch: {prefetch_val}")
         print(f"Shuffle Buffer: {shuffle_buffer}")
         print("-" * 50)
-        
+
         # === GPU-Konfiguration ===
         gpus = tf.config.list_physical_devices("GPU")
         if use_gpu and gpus:
@@ -372,8 +372,17 @@ class MarketSimulationTrainer:
         # === Log-Setup ===
         logs_root = Path(self.data_config.get("paths", {}).get("logs", "logs"))
         logs_root.mkdir(parents=True, exist_ok=True)
+        
         callbacks_list = build_callbacks(self.training_config, logs_root)
-        tf_loader = TFTrainingLoader(total_epochs=int(self.training_config.get("epochs", 50)))
+
+        # ❌ entfernt Keras-eigene Fortschrittsleiste
+        callbacks_list = [cb for cb in callbacks_list if cb.__class__.__name__ != "ProgbarLogger"]
+        
+        tf_loader = TFTrainingLoader(
+            total_epochs=int(self.training_config.get("epochs", 50)),
+            total_batches=len(dataset.X_train) // int(self.training_config.get("batch_size", 64)),
+            update_interval=0.1
+        )
         callbacks_list.append(tf_loader)
 
         # === Dataset-Optimierung ===
@@ -399,13 +408,13 @@ class MarketSimulationTrainer:
         class_weight = self._determine_class_weights(dataset.y_train)
 
         # === Training ===
-        self.history = self.model.fit(
+        self.model.fit(
             train_ds,
             validation_data=val_ds,
             epochs=int(self.training_config.get("epochs", 50)),
             callbacks=callbacks_list,
             class_weight=class_weight,
-            verbose=1,
+            verbose=0, # ⬅️ wichtig: unterdrückt Keras-eigene Logs 0 custom, 1 Vorgabe
         )
 
         # === Modell speichern ===
