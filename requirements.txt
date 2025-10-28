@@ -10,3 +10,4 @@ freecurrencyapi
 python-dotenv
 requests
 colorama
+ipywidgets

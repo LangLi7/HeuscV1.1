@@ -1,11 +1,12 @@
 {
   "data": {
-    "sources": ["binance", "yahoo"],
-    "symbols": ["BTCUSDT", "NVDA"],
+    "sources": ["binance"],
+    "symbols": ["BTCUSDT"],
     "interval": "5m",
     "period": "6mo",
     "chunk_days": 7,
     "features": ["open", "high", "low", "close", "volume"],
+    "indicators": ["RSI", "MACD", "EMA_12", "SMA_20", "BB"],
 
     "preprocessing": {
       "scaler": "minmax",
@@ -18,8 +19,8 @@
     "target": {
       "type": "direction",
       "method": "binary",
-      "threshold": 0.0001,
-      "future_steps": 1
+      "threshold": 0.0005,
+      "future_steps": 5
     },
 
     "split": {
@@ -32,7 +33,11 @@
       "csv": "data/",
       "models": "models/",
       "logs": "logs/",
-      "settings": "config/"
+      "settings": "config/",
+      "indicators": ["RSI", "MACD", "EMA_12", "SMA_20", "BB", "ATR", "ROC", "Volume_Delta"],
+      "custom_csv": {
+        "BTCUSDT": "data/binance_data/BTCUSDT-1m-1y-binance-2025-09-13_11-37-53.csv"
+      }
     }
   },
 
