@@ -2,8 +2,8 @@
   "data": {
     "sources": ["binance"],
     "symbols": ["BTCUSDT"],
-    "interval": "5m",
-    "period": "6mo",
+    "interval": "1m",
+    "period": "1y",
     "chunk_days": 7,
     "features": ["open", "high", "low", "close", "volume"],
     "indicators": ["RSI", "MACD", "EMA_12", "SMA_20", "BB"],
@@ -81,7 +81,7 @@
 
   "training": {
     "epochs": 100,
-    "batch_size": 64,
+    "batch_size": 128,
     "shuffle": false,
     "class_weight": "balanced",
 
@@ -93,9 +93,15 @@
 
     "save_best_only": true,
     "tensorboard": true,
-    "use_gpu": true
-  },
+    "use_gpu": true,
 
+    "gpu_index": 0,
+    "mixed_precision": true,
+    "xla": true,
+    "shuffle_buffer": 2048,
+    "prefetch": "auto"
+  },
+  
   "simulation": {
     "enabled": true,
     "mode": "paper",

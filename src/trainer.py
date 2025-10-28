@@ -20,6 +20,7 @@ import traceback
 
 import numpy as np
 import pandas as pd
+import tensorflow as tf
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.utils.class_weight import compute_class_weight
@@ -317,37 +318,105 @@ class MarketSimulationTrainer:
         if dataset is None:
             dataset = self.prepare_dataset()
 
+        # === Parameter aus settings.json ===
+        gpu_index = int(self.training_config.get("gpu_index", 0))
+        use_gpu = bool(self.training_config.get("use_gpu", True))
+        use_mixed = bool(self.training_config.get("mixed_precision", True))
+        use_xla = bool(self.training_config.get("xla", True))
+        batch_size = int(self.training_config.get("batch_size", 64))
+        shuffle_buffer = int(self.training_config.get("shuffle_buffer", 2048))
+        prefetch_val = self.training_config.get("prefetch", "auto")
+
+        print("\n⚙️ TensorFlow Training Setup (HEUSC Optimiert)\n")
+        print("🧩 HEUSC TRAINING CONFIG")
+        print(f"GPU Index: {gpu_index}")
+        print(f"Mixed Precision: {'✅' if use_mixed else '❌'}")
+        print(f"XLA Compiler: {'✅' if use_xla else '❌'}")
+        print(f"Batch Size: {batch_size} | Prefetch: {prefetch_val}")
+        print(f"Shuffle Buffer: {shuffle_buffer}")
+        print("-" * 50)
+        
+        # === GPU-Konfiguration ===
+        gpus = tf.config.list_physical_devices("GPU")
+        if use_gpu and gpus:
+            try:
+                tf.config.set_visible_devices(gpus[gpu_index], "GPU")
+                print(f"✅ GPU {gpu_index} aktiviert: {gpus[gpu_index].name}")
+            except Exception as e:
+                print(f"⚠️ Fehler beim Setzen der GPU {gpu_index}: {e}")
+        else:
+            print("⚠️ GPU deaktiviert oder nicht verfügbar → CPU-Fallback")
+
+        # === Mixed Precision ===
+        if use_mixed:
+            try:
+                from tensorflow.keras import mixed_precision
+                mixed_precision.set_global_policy("mixed_float16")
+                print("✅ Mixed Precision aktiviert (Tensor Cores aktiv)")
+            except Exception as e:
+                print(f"⚠️ Mixed Precision nicht verfügbar: {e}")
+
+        # === XLA Compiler ===
+        if use_xla:
+            try:
+                tf.config.optimizer.set_jit(True)
+                print("✅ XLA Compiler aktiviert")
+            except Exception:
+                print("⚠️ XLA nicht verfügbar")
+
+        # === Modellaufbau ===
         input_shape = dataset.X_train.shape[1:]
+        print(f"📐 Input Shape: {input_shape}")
         self.model = build_hybrid_cnn_lstm(input_shape, settings=self.settings)
 
+        # === Log-Setup ===
         logs_root = Path(self.data_config.get("paths", {}).get("logs", "logs"))
         logs_root.mkdir(parents=True, exist_ok=True)
         callbacks_list = build_callbacks(self.training_config, logs_root)
-
-        # 🔹 TensorFlow Loader Callback einfügen
         tf_loader = TFTrainingLoader(total_epochs=int(self.training_config.get("epochs", 50)))
         callbacks_list.append(tf_loader)
 
-        class_weight = self._determine_class_weights(dataset.y_train)
+        # === Dataset-Optimierung ===
+        AUTOTUNE = tf.data.AUTOTUNE
+        prefetch_size = AUTOTUNE if prefetch_val == "auto" else int(prefetch_val)
 
-        self.history = self.model.fit(
-            dataset.X_train,
-            dataset.y_train,
-            validation_data=(dataset.X_val, dataset.y_val),
-            epochs=int(self.training_config.get("epochs", 50)),
-            batch_size=int(self.training_config.get("batch_size", 64)),
-            shuffle=bool(self.training_config.get("shuffle", False)),
-            callbacks=callbacks_list,
-            class_weight=class_weight,
-            verbose=0,  # ⬅️ wichtig: unterdrückt Keras-eigene Logs
+        train_ds = (
+            tf.data.Dataset.from_tensor_slices((dataset.X_train, dataset.y_train))
+            .shuffle(shuffle_buffer)
+            .batch(batch_size)
+            .prefetch(prefetch_size)
         )
 
+        val_ds = (
+            tf.data.Dataset.from_tensor_slices((dataset.X_val, dataset.y_val))
+            .batch(batch_size)
+            .prefetch(prefetch_size)
+        )
+
+        print(f"\n🚀 Training gestartet (Batch Size {batch_size})\n")
+
+        # === Class Weights ===
+        class_weight = self._determine_class_weights(dataset.y_train)
+
+        # === Training ===
+        self.history = self.model.fit(
+            train_ds,
+            validation_data=val_ds,
+            epochs=int(self.training_config.get("epochs", 50)),
+            callbacks=callbacks_list,
+            class_weight=class_weight,
+            verbose=1,
+        )
+
+        # === Modell speichern ===
         if self.training_config.get("save_best_only", False):
             models_dir = Path(self.data_config.get("paths", {}).get("models", "models"))
             models_dir.mkdir(parents=True, exist_ok=True)
             model_path = models_dir / "hybrid_cnn_lstm.keras"
             self.model.save(model_path)
+            print(f"💾 Modell gespeichert unter {model_path}")
 
+        print("\n✅ Training abgeschlossen!\n")
         return self.model
     
     # ------------------------------------------------------------------
@@ -451,3 +520,9 @@ class MarketSimulationTrainer:
 
 
 __all__ = ["MarketSimulationTrainer", "DatasetSplit"]
+if __name__ == "__main__":
+    
+    settings_path = str("config/settings.json")
+    trainer = MarketSimulationTrainer(Path(settings_path))
+    results = trainer.run()
+    print(json.dumps(results, indent=2, ensure_ascii=False))

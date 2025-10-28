@@ -2,6 +2,9 @@
 from __future__ import annotations
 
 import json
+import os
+
+import tensorflow as tf
 
 from pathlib import Path
 
@@ -9,6 +12,8 @@ from src.trainer import MarketSimulationTrainer
 from src.gpu_check import gpu_info
 from src.loader import SystemLoader
 
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+tf.get_logger().setLevel("ERROR")
 
 def main(settings_path: str = "config/settings.json") -> None:
     trainer = MarketSimulationTrainer(Path(settings_path))
