@@ -113,3 +113,50 @@ def start_live_poll(symbol: str, interval: str):
     _live_threads[key] = {"thread": thread, "stop": stop_event}
     thread.start()
     return {"status": "started", "key": key}
+
+def fetch_klines_chunked(symbol: str, interval: str, start, end):
+    """
+    Holt historische OHLCV-Daten von Binance in Chunks (wegen API-Limit).
+    Erwartet start und end als datetime.
+    Gibt DataFrame mit Spalten ['timestamp','open','high','low','close','volume'] zurück.
+    """
+    api_key = os.getenv("BINANCE_API_KEY")
+    api_secret = os.getenv("BINANCE_API_SECRET")
+    client = BinanceClient(api_key, api_secret)
+
+    klines = client.get_historical_klines(
+        symbol=symbol,
+        interval=interval,
+        start_str=start.strftime("%Y-%m-%d %H:%M:%S"),
+        end_str=end.strftime("%Y-%m-%d %H:%M:%S")
+    )
+
+    df = pd.DataFrame(klines, columns=[
+        "open_time","open","high","low","close","volume",
+        "close_time","quote_asset_volume","trades",
+        "taker_buy_base","taker_buy_quote","ignore"
+    ])
+
+    # Relevante Spalten normalisieren
+    df = df[["open_time","open","high","low","close","volume"]]
+    df["timestamp"] = pd.to_datetime(df["open_time"], unit="ms", utc=True)
+    df = df.drop(columns=["open_time"])
+    df = df[["timestamp","open","high","low","close","volume"]]
+
+    df = df.astype({
+        "open":"float",
+        "high":"float",
+        "low":"float",
+        "close":"float",
+        "volume":"float"
+    })
+
+    return df
+
+def fetch_historical_binance(symbol, interval, start, end):
+    """
+    Alias, damit Aufrufer, die fetch_historical_binance erwarten,
+    automatisch unsere bestehende chunked-Funktion nutzen.
+    """
+    # Falls deine Hauptfunktion anders heißt, hier anpassen:
+    return fetch_klines_chunked(symbol=symbol, interval=interval, start=start, end=end)

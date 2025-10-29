@@ -1,0 +1,114 @@
+[2025-10-29 19:07:05] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 19:07:07] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 19:07:07] [EvalLast7d] settings.json nicht gefunden -> Indikatoren via indicator_calculator evtl. limitiert / Fallback.
+[2025-10-29 19:17:56] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 19:17:58] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 19:17:58] [EvalLast7d] settings.json nicht gefunden -> Indikatoren via indicator_calculator evtl. limitiert / Fallback.
+[2025-10-29 19:17:58] [EvalLast7d] data_manager.get_data() fehlgeschlagen: No module named 'data'
+[2025-10-29 19:17:58] [EvalLast7d] binance_data.* fehlgeschlagen: No module named 'data'
+[2025-10-29 19:17:58] [EvalLast7d] candle_builder.* fehlgeschlagen: No module named 'data'
+[2025-10-29 19:19:13] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 19:19:15] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 19:19:15] [EvalLast7d] settings.json nicht gefunden -> Indikatoren via indicator_calculator evtl. limitiert / Fallback.
+[2025-10-29 19:19:15] [EvalLast7d] data_manager.get_data() fehlgeschlagen: No module named 'data'
+[2025-10-29 19:19:15] [EvalLast7d] binance_data.* fehlgeschlagen: No module named 'data'
+[2025-10-29 19:19:15] [EvalLast7d] candle_builder.* fehlgeschlagen: No module named 'data'
+[2025-10-29 19:20:36] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 19:20:37] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 19:20:37] [EvalLast7d] settings.json nicht gefunden -> Indikatoren via indicator_calculator evtl. limitiert / Fallback.
+[2025-10-29 19:20:38] [EvalLast7d] data_manager.get_data() fehlgeschlagen: cannot import name 'fetch_historical_binance' from 'data.binance_data' (/home/changchi/HeuscV1.1/data/binance_data.py)
+[2025-10-29 19:22:16] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 19:22:17] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 19:22:17] [EvalLast7d] settings.json nicht gefunden -> Indikatoren via indicator_calculator evtl. limitiert / Fallback.
+[2025-10-29 19:22:17] [EvalLast7d] data_manager.get_data() fehlgeschlagen: cannot import name 'fetch_historical_binance' from 'data.binance_data' (/home/changchi/HeuscV1.1/data/binance_data.py)
+[2025-10-29 19:32:09] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 19:32:10] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 19:32:10] [EvalLast7d] settings.json nicht gefunden -> Indikatoren via indicator_calculator evtl. limitiert / Fallback.
+[2025-10-29 19:51:00] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 19:51:02] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 19:51:02] [EvalLast7d] settings.json nicht gefunden -> Indikatoren via indicator_calculator evtl. limitiert / Fallback.
+[2025-10-29 19:51:31] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 19:51:33] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 19:51:33] [EvalLast7d] settings.json nicht gefunden -> Indikatoren via indicator_calculator evtl. limitiert / Fallback.
+[2025-10-29 19:56:23] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 19:56:25] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 19:56:25] [EvalLast7d] settings.json nicht gefunden -> Indikatoren via indicator_calculator evtl. limitiert / Fallback.
+[2025-10-29 19:57:28] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 19:57:30] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 19:57:30] [EvalLast7d] settings.json nicht gefunden -> Indikatoren via indicator_calculator evtl. limitiert / Fallback.
+[2025-10-29 20:03:56] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 20:03:57] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 20:03:57] [EvalLast7d] settings.json: /home/changchi/HeuscV1.1/config/settings.json
+[2025-10-29 20:04:41] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 20:04:42] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 20:04:42] [EvalLast7d] settings.json: /home/changchi/HeuscV1.1/config/settings.json
+[2025-10-29 20:10:09] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 20:10:10] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 20:10:10] [EvalLast7d] settings.json: /home/changchi/HeuscV1.1/config/settings.json
+[2025-10-29 20:10:10] [EvalLast7d] Fetching Binance data for BTCUSDT 1m from 2025-10-22 19:10:09.222784+00:00 to 2025-10-29 19:10:09.222782+00:00
+[2025-10-29 20:10:10] [EvalLast7d] ⚠️ fetch_historical_binance Fehler: name 'fetch_klines_chunked' is not defined
+[2025-10-29 20:13:02] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 20:13:03] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 20:13:03] [EvalLast7d] settings.json: /home/changchi/HeuscV1.1/config/settings.json
+[2025-10-29 20:13:04] [EvalLast7d] Fetching Binance data for BTCUSDT 1m from 2025-10-22 19:13:02.580479+00:00 to 2025-10-29 19:13:02.580477+00:00
+[2025-10-29 20:13:11] [EvalLast7d] ❌ Binance Fetch fehlgeschlagen: Ungültige Spalten: ['open_time', 'open', 'high', 'low', 'close', 'volume', 'close_time', 'quote_asset_volume', 'trades', 'taker_buy_base', 'taker_buy_quote', 'ignore']
+[2025-10-29 20:14:37] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 20:14:39] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 20:14:39] [EvalLast7d] settings.json: /home/changchi/HeuscV1.1/config/settings.json
+[2025-10-29 20:14:39] [EvalLast7d] Fetching Binance data for BTCUSDT 1m from 2025-10-22 19:14:37.988203+00:00 to 2025-10-29 19:14:37.988201+00:00
+[2025-10-29 20:14:47] [EvalLast7d] ✅ Binance Fetch erfolgreich: 10080 Zeilen geladen.
+[2025-10-29 20:14:47] [EvalLast7d] Datenpunkte: 10080 | Zeitraum 2025-10-22 19:15:00+00:00 .. 2025-10-29 19:14:00+00:00
+[2025-10-29 20:14:47] [EvalLast7d] Samples: 10020 | Features: 18
+[2025-10-29 20:15:00] [EvalLast7d] Letzte 10 Scores:
+[2025-10-29 20:15:00] [EvalLast7d] 2025-10-29T19:05:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:15:00] [EvalLast7d] 2025-10-29T19:06:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:15:00] [EvalLast7d] 2025-10-29T19:07:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:15:00] [EvalLast7d] 2025-10-29T19:08:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:15:00] [EvalLast7d] 2025-10-29T19:09:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:15:00] [EvalLast7d] 2025-10-29T19:10:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:15:00] [EvalLast7d] 2025-10-29T19:11:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:15:00] [EvalLast7d] 2025-10-29T19:12:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:15:00] [EvalLast7d] 2025-10-29T19:13:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:15:00] [EvalLast7d] 2025-10-29T19:14:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:15:00] [EvalLast7d] Fertig. ROI=0.0% | Trades=0 | Winrate=0% | MDD=0%
+[2025-10-29 20:15:00] [EvalLast7d] Details in /home/changchi/HeuscV1.1/logs/model_eval.json
+[2025-10-29 20:19:22] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 20:19:23] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 20:19:23] [EvalLast7d] settings.json: /home/changchi/HeuscV1.1/config/settings.json
+[2025-10-29 20:19:23] [EvalLast7d] Fetching Binance data for BTCUSDT 1m from 2025-10-22 19:19:22.129009+00:00 to 2025-10-29 19:19:22.129007+00:00
+[2025-10-29 20:19:31] [EvalLast7d] ✅ Binance Fetch erfolgreich: 10080 Zeilen geladen.
+[2025-10-29 20:19:31] [EvalLast7d] Datenpunkte: 10080 | Zeitraum 2025-10-22 19:20:00+00:00 .. 2025-10-29 19:19:00+00:00
+[2025-10-29 20:19:31] [EvalLast7d] Samples: 10020 | Features: 18
+[2025-10-29 20:19:45] [EvalLast7d] Letzte 10 Scores:
+[2025-10-29 20:19:45] [EvalLast7d] 2025-10-29T19:10:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:19:45] [EvalLast7d] 2025-10-29T19:11:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:19:45] [EvalLast7d] 2025-10-29T19:12:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:19:45] [EvalLast7d] 2025-10-29T19:13:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:19:45] [EvalLast7d] 2025-10-29T19:14:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:19:45] [EvalLast7d] 2025-10-29T19:15:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:19:45] [EvalLast7d] 2025-10-29T19:16:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:19:45] [EvalLast7d] 2025-10-29T19:17:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:19:45] [EvalLast7d] 2025-10-29T19:18:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:19:45] [EvalLast7d] 2025-10-29T19:19:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:19:45] [EvalLast7d] Fertig. ROI=0.0% | Trades=0 | Winrate=0% | MDD=0%
+[2025-10-29 20:19:45] [EvalLast7d] Details in /home/changchi/HeuscV1.1/logs/model_eval.json
+[2025-10-29 20:31:29] [EvalLast7d] Start | Host=DESKTOP-CNDT5OQ | OS=Linux 6.6.87.2-microsoft-standard-WSL2 (x86_64) | Symbol=BTCUSDT | Interval=1m | Window=7d
+[2025-10-29 20:31:30] [EvalLast7d] Model input: seq_len=60, n_feat=18
+[2025-10-29 20:31:30] [EvalLast7d] settings.json: /home/changchi/HeuscV1.1/config/settings.json
+[2025-10-29 20:31:31] [EvalLast7d] Fetching Binance data for BTCUSDT 1m from 2025-10-22 19:31:29.511055+00:00 to 2025-10-29 19:31:29.511054+00:00
+[2025-10-29 20:31:38] [EvalLast7d] ✅ Binance Fetch erfolgreich: 10080 Zeilen geladen.
+[2025-10-29 20:31:38] [EvalLast7d] Datenpunkte: 10080 | Zeitraum 2025-10-22 19:32:00+00:00 .. 2025-10-29 19:31:00+00:00
+[2025-10-29 20:31:38] [EvalLast7d] Samples: 10020 | Features: 18
+[2025-10-29 20:31:54] [EvalLast7d] Letzte 10 Scores:
+[2025-10-29 20:31:54] [EvalLast7d] 2025-10-29T19:22:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:31:54] [EvalLast7d] 2025-10-29T19:23:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:31:54] [EvalLast7d] 2025-10-29T19:24:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:31:54] [EvalLast7d] 2025-10-29T19:25:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:31:54] [EvalLast7d] 2025-10-29T19:26:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:31:54] [EvalLast7d] 2025-10-29T19:27:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:31:54] [EvalLast7d] 2025-10-29T19:28:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:31:54] [EvalLast7d] 2025-10-29T19:29:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:31:54] [EvalLast7d] 2025-10-29T19:30:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:31:54] [EvalLast7d] 2025-10-29T19:31:00+00:00 | score=nan | decision=SELL
+[2025-10-29 20:31:54] [EvalLast7d] Fertig. ROI=0.0% | Trades=0 | Winrate=0% | MDD=0%
+[2025-10-29 20:31:54] [EvalLast7d] Details in /home/changchi/HeuscV1.1/logs/model_eval.json

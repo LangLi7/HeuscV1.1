@@ -529,6 +529,7 @@ class MarketSimulationTrainer:
 
 
 __all__ = ["MarketSimulationTrainer", "DatasetSplit"]
+
 if __name__ == "__main__":
     
     settings_path = str("config/settings.json")

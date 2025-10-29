@@ -169,8 +169,25 @@ class TechnicalIndicatorCalculator:
             except Exception as e:
                 print(f"[IndicatorCalc] ⚠ Fehler bei {name}: {e}")
 
+        result_df = result_df.replace([np.inf, -np.inf], 0) #fehler evt
+        result_df = result_df.fillna(0) #fehler evt
         return result_df
 
+# ============================================================================
+# KOMPATIBILITÄTS-FUNKTION (für ältere Skripte wie quick_predict)
+# ============================================================================
+def calculate_indicators(df: pd.DataFrame, settings: dict = None) -> pd.DataFrame:
+    """
+    Wrapper-Funktion für quick_predict.py – nutzt TechnicalIndicatorCalculator.
+    """
+    # Settings prüfen
+    indicators = None
+    if settings and isinstance(settings, dict):
+        data_cfg = settings.get("data", {})
+        indicators = data_cfg.get("indicators", None)
+
+    calc = TechnicalIndicatorCalculator()
+    return calc.calculate_all_indicators(df, indicators=indicators)
 
 # ============================================================================
 # BEISPIEL-VERWENDUNG MIT SETTINGS.JSON UND REALER CSV
@@ -203,8 +220,8 @@ if __name__ == "__main__":
     data_cfg = settings.get("data", {})
     custom_csvs = data_cfg.get("custom_csv", data_cfg.get("paths", {}).get("custom_csv", {}))
     indicators = data_cfg.get("indicators", ["RSI", "MACD", "EMA_12", "SMA_20", "BB"])
-    max_rows_preview = 10  # nur die ersten 10 Zeilen anzeigen
-
+    max_rows_preview = 100  # nur die ersten 10 Zeilen anzeigen
+    print(indicators)
     calc = TechnicalIndicatorCalculator()
 
     if not custom_csvs:

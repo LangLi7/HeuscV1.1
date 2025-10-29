@@ -9,9 +9,13 @@ import time
 import math
 
 # Lade .env aus dem übergeordneten Verzeichnis
-env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
 load_dotenv(dotenv_path=env_path)
 
+API_KEY = os.getenv("BINANCE_API_KEY")
+API_SECRET = os.getenv("BINANCE_SECRET_KEY")
+
+print("[data_loader] Binance keys loaded:", bool(API_KEY), bool(API_SECRET))
 
 class DataFetcher:
     def __init__(self, source='binance', symbol='BTCUSDT', interval='1m', output_dir='data/', chunk_size=1000):
